@@ -1,0 +1,26 @@
+scalar Long
+
+type User {
+  id: Long!
+  name: String!
+}
+
+type Task {
+  id: Long!
+  title: String!
+  description: String
+}
+
+type Query {
+  getUser(id: Long!): User
+  getTasks: [Task!]
+}
+
+type Mutation {
+  addTask(title: String!, desc: String): Task
+}
+
+schema {
+  query: Query
+  mutation: Mutation
+}
