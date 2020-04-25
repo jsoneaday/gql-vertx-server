@@ -10,26 +10,22 @@ import java.util.concurrent.CompletableFuture
 val userDataFetcher = object: DataFetcher<User?> {
   override fun get(environment: DataFetchingEnvironment?): User? {
     val id = environment?.getArgument<Long>("id")
-    val user: User? = EntityData.getUser(id ?: 0)
-    return user
+    return EntityData.getUser(id ?: 0)
   }
 }
 
 val tasksDataFetcher = object: DataFetcher<MutableList<Task>?> {
   override fun get(environment: DataFetchingEnvironment?): MutableList<Task>? {
-    val tasks = EntityData.getTasks()
-    return tasks
+    return EntityData.getTasks()
   }
 }
 
 val addTaskFetcher = object: DataFetcher<CompletableFuture<Task?>> {
   override fun get(environment: DataFetchingEnvironment?): CompletableFuture<Task?> {
-    val promise: CompletableFuture<Task?> = CompletableFuture.supplyAsync {
-      val title = environment?.getArgument<String>("title") ?: ""
+    return CompletableFuture.supplyAsync {
+      val title = environment?.getArgument("title") ?: ""
       val desc = environment?.getArgument<String?>("desc")
-      val addedTask = EntityData.addTask(title, desc)
-      return@supplyAsync addedTask
+      return@supplyAsync EntityData.addTask(title, desc)
     }
-    return promise
   }
 }
