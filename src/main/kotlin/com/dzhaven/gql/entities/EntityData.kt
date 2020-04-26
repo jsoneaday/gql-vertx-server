@@ -24,7 +24,7 @@ class EntityData {
     }
 
     fun getTasks(): MutableList<Task>? {
-      println("all tasks" + tasks)
+      println("all tasks$tasks")
       return tasks
     }
 
