@@ -19,7 +19,7 @@ class HttpVerticle: AbstractVerticle() {
             .allowedHeaders(allowedHeaders))
 
         val schemaStr = handler.result().toString()
-        val graphQL = getGraphQL(schemaStr)
+        val graphQL = getGraphQL(vertx, schemaStr)
         router.post("/graphql").handler(GraphQLHandler.create(graphQL))
 
         vertx.createHttpServer().requestHandler(router).listen(9999)
