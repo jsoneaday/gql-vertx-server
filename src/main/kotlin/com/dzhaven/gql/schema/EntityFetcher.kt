@@ -6,7 +6,7 @@ import graphql.schema.DataFetchingEnvironment
 import io.vertx.core.Vertx
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.future.future
 import java.util.concurrent.CompletableFuture
 
 class DataFetchers(private val vertx: Vertx) {
@@ -15,35 +15,26 @@ class DataFetchers(private val vertx: Vertx) {
   }
 
   val userDataFetcher = object : DataFetcher<CompletableFuture<UserEntity?>> {
-    override fun get(environment: DataFetchingEnvironment?): CompletableFuture<UserEntity?> {
-      val future = CompletableFuture<UserEntity?>()
-      CoroutineScope(Dispatchers.IO).launch{
+    override fun get(environment: DataFetchingEnvironment?): CompletableFuture<UserEntity?> =
+      CoroutineScope(Dispatchers.IO).future {
         val id = environment?.getArgument<Long>("id")
-        future.complete(EntityData.getUser(id ?: 0))
+        EntityData.getUser(id ?: 0)
       }
-      return future
-    }
   }
 
   val tasksDataFetcher = object : DataFetcher<CompletableFuture<ArrayList<TaskEntity>>> {
-    override fun get(environment: DataFetchingEnvironment?): CompletableFuture<ArrayList<TaskEntity>> {
-      val future = CompletableFuture<ArrayList<TaskEntity>>()
-      CoroutineScope(Dispatchers.IO).launch {
-        future.complete(EntityData.getTasks())
+    override fun get(environment: DataFetchingEnvironment?): CompletableFuture<ArrayList<TaskEntity>> =
+      CoroutineScope(Dispatchers.IO).future {
+        EntityData.getTasks()
       }
-      return future
-    }
   }
 
   val addTaskFetcher = object : DataFetcher<CompletableFuture<TaskEntity?>> {
-    override fun get(environment: DataFetchingEnvironment?): CompletableFuture<TaskEntity?> {
-      val future = CompletableFuture<TaskEntity?>()
-      CoroutineScope(Dispatchers.IO).launch {
+    override fun get(environment: DataFetchingEnvironment?): CompletableFuture<TaskEntity?> =
+      CoroutineScope(Dispatchers.IO).future {
         val title = environment?.getArgument("title") ?: ""
         val desc = environment?.getArgument<String>("desc")
-        future.complete(EntityData.addTask(title, desc))
+        EntityData.addTask(title, desc)
       }
-      return future
-    }
   }
 }
