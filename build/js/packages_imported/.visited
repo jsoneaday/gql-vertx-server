@@ -1,0 +1,16 @@
+{
+  "version": "9",
+  "items": {
+    "3553c837b3390f66587fdb569d2e7951": {
+      "src": "/Users/davidchoi/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-common/1.3.72/6ca8bee3d88957eaaaef077c41c908c9940492d8/kotlin-stdlib-common-1.3.72.jar"
+    },
+    "18cde66bd3b7a43050c716ede0e8853f": {
+      "src": "/Users/davidchoi/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-js/1.3.72/a44129682a793513f559af4da4ab175c0c31b185/kotlin-stdlib-js-1.3.72.jar",
+      "target": "kotlin/1.3.72"
+    },
+    "a28a4429e888bcd8f356707dedbcd7e9": {
+      "src": "/Users/davidchoi/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-source-map-loader/1.3.72/291c59847ea092350a8d829ad96a89978c0e47a3/kotlin-source-map-loader-1.3.72.jar",
+      "target": "kotlin-source-map-loader/1.3.72"
+    }
+  }
+}

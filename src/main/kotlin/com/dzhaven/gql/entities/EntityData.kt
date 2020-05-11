@@ -1,5 +1,7 @@
 package com.dzhaven.gql.entities
 
+import com.dzhaven.gql.shared.User
+import com.dzhaven.gql.shared.Task
 import com.dzhaven.gql.dal.helpers.execPreparedQuery
 import com.dzhaven.gql.dal.helpers.execQuery
 import io.vertx.core.Vertx
@@ -9,9 +11,6 @@ import io.vertx.sqlclient.PoolOptions
 import io.vertx.sqlclient.Row
 import io.vertx.sqlclient.RowSet
 import io.vertx.sqlclient.Tuple
-
-data class UserEntity (var id: Long, var name: String)
-data class TaskEntity (var id: Long, var title: String, var description: String?)
 
 class EntityData {
   companion object {
@@ -30,7 +29,7 @@ class EntityData {
       client = PgPool.pool(vertx, connOptions, PoolOptions().setMaxSize(5))
     }
 
-    suspend fun getUser(id: Long): UserEntity? {
+    suspend fun getUser(id: Long): User? {
       val rows = execPreparedQuery(
         client,
       """
@@ -43,7 +42,7 @@ class EntityData {
       return getNewUser(rows.first())
     }
 
-    suspend fun getTasks(): ArrayList<TaskEntity> {
+    suspend fun getTasks(): ArrayList<Task> {
       val rows = execQuery(
         client,
         """
@@ -54,7 +53,7 @@ class EntityData {
       return getTasks(rows)
     }
 
-    suspend fun addTask(title: String, desc: String?): TaskEntity? {
+    suspend fun addTask(title: String, desc: String?): Task? {
       val addedRows = execPreparedQuery(
         client,
         """
@@ -81,18 +80,18 @@ class EntityData {
       return getNewTask(newTaskRow.first())
     }
 
-    private fun getNewUser(row: Row): UserEntity {
+    private fun getNewUser(row: Row): User {
       return with(row) {
-        UserEntity(
+        User(
           id = getLong("Id"),
           name = getString("Name")
         )
       }
     }
 
-    private fun getNewTask(row: Row): TaskEntity {
+    private fun getNewTask(row: Row): Task {
       return with(row) {
-        TaskEntity(
+        Task(
           id = getLong("Id"),
           title = getString("Title"),
           description = getString("Description")
@@ -100,8 +99,8 @@ class EntityData {
       }
     }
 
-    private fun getTasks(rows: RowSet<Row>): ArrayList<TaskEntity> {
-      val tasks = arrayListOf<TaskEntity>()
+    private fun getTasks(rows: RowSet<Row>): ArrayList<Task> {
+      val tasks = arrayListOf<Task>()
       rows.forEach{ row ->
         tasks.add(getNewTask(row))
       }

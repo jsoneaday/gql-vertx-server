@@ -1,5 +1,6 @@
 package com.dzhaven.gql.dal.helpers
 
+import com.dzhaven.gql.shared.printMe
 import io.vertx.core.AsyncResult
 import io.vertx.pgclient.PgPool
 import io.vertx.sqlclient.Row
@@ -50,7 +51,7 @@ private fun handleQueryResult(
   try {
     if (qr.succeeded()) {
       continuation.resume(qr.result())
-      println("result ${qr.result()}")
+      printMe("result ${qr.result()}")
     } else {
       continuation.resumeWithException(qr.cause())
     }

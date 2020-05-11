@@ -1,1 +1,2 @@
 rootProject.name = 'gql'
+include ":shared"
