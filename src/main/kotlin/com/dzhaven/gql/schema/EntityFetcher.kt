@@ -6,6 +6,7 @@ import com.dzhaven.gql.shared.User
 import graphql.schema.DataFetcher
 import graphql.schema.DataFetchingEnvironment
 import io.vertx.core.Vertx
+import io.vertx.kotlin.coroutines.dispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.future.future
@@ -18,7 +19,7 @@ class DataFetchers(private val vertx: Vertx) {
 
   val userDataFetcher = object : DataFetcher<CompletableFuture<User?>> {
     override fun get(environment: DataFetchingEnvironment?): CompletableFuture<User?> =
-      CoroutineScope(Dispatchers.IO).future {
+      CoroutineScope(vertx.dispatcher()).future {
         val id = environment?.getArgument<Long>("id")
         EntityData.getUser(id ?: 0)
       }
@@ -26,14 +27,14 @@ class DataFetchers(private val vertx: Vertx) {
 
   val tasksDataFetcher = object : DataFetcher<CompletableFuture<ArrayList<Task>>> {
     override fun get(environment: DataFetchingEnvironment?): CompletableFuture<ArrayList<Task>> =
-      CoroutineScope(Dispatchers.IO).future {
+      CoroutineScope(vertx.dispatcher()).future {
         EntityData.getTasks()
       }
   }
 
   val addTaskFetcher = object : DataFetcher<CompletableFuture<Task?>> {
     override fun get(environment: DataFetchingEnvironment?): CompletableFuture<Task?> =
-      CoroutineScope(Dispatchers.IO).future {
+      CoroutineScope(vertx.dispatcher()).future {
         val title = environment?.getArgument("title") ?: ""
         val desc = environment?.getArgument<String>("desc")
         EntityData.addTask(title, desc)

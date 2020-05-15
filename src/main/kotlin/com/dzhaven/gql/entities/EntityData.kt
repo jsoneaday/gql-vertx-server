@@ -1,9 +1,8 @@
 package com.dzhaven.gql.entities
 
+import com.dzhaven.gql.dal.helpers.DalHelpers
 import com.dzhaven.gql.shared.User
 import com.dzhaven.gql.shared.Task
-import com.dzhaven.gql.dal.helpers.execPreparedQuery
-import com.dzhaven.gql.dal.helpers.execQuery
 import io.vertx.core.Vertx
 import io.vertx.pgclient.PgConnectOptions
 import io.vertx.pgclient.PgPool
@@ -27,11 +26,11 @@ class EntityData {
         password = "test123"
       }
       client = PgPool.pool(vertx, connOptions, PoolOptions().setMaxSize(5))
+      DalHelpers.init(client)
     }
 
     suspend fun getUser(id: Long): User? {
-      val rows = execPreparedQuery(
-        client,
+      val rows = DalHelpers.execPreparedQuery(
       """
         select *
         from "Users"
@@ -43,8 +42,7 @@ class EntityData {
     }
 
     suspend fun getTasks(): ArrayList<Task> {
-      val rows = execQuery(
-        client,
+      val rows = DalHelpers.execQuery(
         """
           select *
           from "Tasks"
@@ -54,8 +52,7 @@ class EntityData {
     }
 
     suspend fun addTask(title: String, desc: String?): Task? {
-      val addedRows = execPreparedQuery(
-        client,
+      val addedRows = DalHelpers.execPreparedQuery(
         """
           insert into "Tasks"
           ("Title", "Description")
@@ -68,8 +65,7 @@ class EntityData {
 
       val id = addedRows.first().getLong("Id")
 
-      val newTaskRow = execPreparedQuery(
-        client,
+      val newTaskRow = DalHelpers.execPreparedQuery(
         """
           select *
           from "Tasks"
